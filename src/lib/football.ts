@@ -286,8 +286,8 @@ export function generateRoundRobin(teamIds: string[]) {
   const n = ids.length;
   for (let round = 0; round < n - 1; round++) {
     for (let i = 0; i < n / 2; i++) {
-      const home = ids[i];
-      const away = ids[n - 1 - i];
+      const home = ids[i]!;
+      const away = ids[n - 1 - i]!;
       if (home !== "__bye__" && away !== "__bye__") {
         rounds.push(
           round % 2 === 0
