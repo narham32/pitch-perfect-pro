@@ -19,6 +19,7 @@ import { Route as AdminPaymentsRouteImport } from './routes/admin.payments'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as CompetitionsIndexRouteImport } from './routes/competitions.index'
+import { Route as CompetitionsIdRouteImport } from './routes/competitions.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -70,6 +71,11 @@ const CompetitionsIndexRoute = CompetitionsIndexRouteImport.update({
   path: '/competitions/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CompetitionsIdRoute = CompetitionsIdRouteImport.update({
+  id: '/competitions/$id',
+  path: '/competitions/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -80,6 +86,7 @@ export interface FileRoutesByFullPath {
   '/admin/payments': typeof AdminPaymentsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/users': typeof AdminUsersRoute
+  '/competitions/$id': typeof CompetitionsIdRoute
   '/admin/': typeof AdminIndexRoute
   '/competitions/': typeof CompetitionsIndexRoute
 }
@@ -91,6 +98,7 @@ export interface FileRoutesByTo {
   '/admin/payments': typeof AdminPaymentsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/users': typeof AdminUsersRoute
+  '/competitions/$id': typeof CompetitionsIdRoute
   '/admin': typeof AdminIndexRoute
   '/competitions': typeof CompetitionsIndexRoute
 }
@@ -104,6 +112,7 @@ export interface FileRoutesById {
   '/admin/payments': typeof AdminPaymentsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/users': typeof AdminUsersRoute
+  '/competitions/$id': typeof CompetitionsIdRoute
   '/admin/': typeof AdminIndexRoute
   '/competitions/': typeof CompetitionsIndexRoute
 }
@@ -118,6 +127,7 @@ export interface FileRouteTypes {
     | '/admin/payments'
     | '/admin/settings'
     | '/admin/users'
+    | '/competitions/$id'
     | '/admin/'
     | '/competitions/'
   fileRoutesByTo: FileRoutesByTo
@@ -129,6 +139,7 @@ export interface FileRouteTypes {
     | '/admin/payments'
     | '/admin/settings'
     | '/admin/users'
+    | '/competitions/$id'
     | '/admin'
     | '/competitions'
   id:
@@ -141,6 +152,7 @@ export interface FileRouteTypes {
     | '/admin/payments'
     | '/admin/settings'
     | '/admin/users'
+    | '/competitions/$id'
     | '/admin/'
     | '/competitions/'
   fileRoutesById: FileRoutesById
@@ -149,6 +161,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
   AuthRoute: typeof AuthRoute
+  CompetitionsIdRoute: typeof CompetitionsIdRoute
   CompetitionsIndexRoute: typeof CompetitionsIndexRoute
 }
 
@@ -224,6 +237,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CompetitionsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/competitions/$id': {
+      id: '/competitions/$id'
+      path: '/competitions/$id'
+      fullPath: '/competitions/$id'
+      preLoaderRoute: typeof CompetitionsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -251,6 +271,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
   AuthRoute: AuthRoute,
+  CompetitionsIdRoute: CompetitionsIdRoute,
   CompetitionsIndexRoute: CompetitionsIndexRoute,
 }
 export const routeTree = rootRouteImport
