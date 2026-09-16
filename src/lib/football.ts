@@ -311,3 +311,113 @@ export function formatKickoff(value: string | null) {
     minute: "2-digit",
   });
 }
+
+export type PlayerRow = {
+  id: string;
+  team_id: string;
+  full_name: string;
+  position: string | null;
+  jersey_number: number | null;
+  birth_date: string | null;
+  photo_url: string | null;
+  verified: boolean;
+};
+
+export function teamQuery(id: string) {
+  return {
+    queryKey: ["team", id],
+    queryFn: async () => {
+      const res = await supabase.from("teams").select("*").eq("id", id).maybeSingle();
+      if (res.error) throw new Error(res.error.message);
+      return res.data as (Team & { manager_id: string | null }) | null;
+    },
+  };
+}
+
+export function teamPlayersQuery(teamId: string) {
+  return {
+    queryKey: ["team-players", teamId],
+    queryFn: async () =>
+      unwrap<PlayerRow[]>(
+        await supabase
+          .from("team_players")
+          .select("*")
+          .eq("team_id", teamId)
+          .order("jersey_number", { ascending: true }),
+      ),
+  };
+}
+
+export function teamMatchesQuery(teamId: string) {
+  return {
+    queryKey: ["team-matches", teamId],
+    queryFn: async () =>
+      unwrap<MatchRow[]>(
+        await supabase
+          .from("matches")
+          .select(MATCH_SELECT)
+          .or(`home_team_id.eq.${teamId},away_team_id.eq.${teamId}`)
+          .order("kickoff_at", { ascending: true }),
+      ),
+  };
+}
+
+export function teamRegistrationsQuery(teamId: string) {
+  return {
+    queryKey: ["team-registrations", teamId],
+    queryFn: async () =>
+      unwrap<{ id: string; status: string; competitions: Competition | null }[]>(
+        await supabase
+          .from("competition_registrations")
+          .select("id,status,competitions(*)")
+          .eq("team_id", teamId),
+      ),
+  };
+}
+
+export function playerQuery(id: string) {
+  return {
+    queryKey: ["player", id],
+    queryFn: async () => {
+      const res = await supabase
+        .from("team_players")
+        .select("*, teams(id,name,short_name,city,logo_url)")
+        .eq("id", id)
+        .maybeSingle();
+      if (res.error) throw new Error(res.error.message);
+      return res.data as (PlayerRow & { teams: Team | null }) | null;
+    },
+  };
+}
+
+export function playerEventsQuery(playerId: string) {
+  return {
+    queryKey: ["player-events", playerId],
+    queryFn: async () =>
+      unwrap<{ id: string; event_type: MatchEventType; minute: number | null }[]>(
+        await supabase.from("match_events").select("id,event_type,minute").eq("player_id", playerId),
+      ),
+  };
+}
+
+export function competitionTeamsQuery(competitionId: string) {
+  return {
+    queryKey: ["competition-teams", competitionId],
+    queryFn: async () =>
+      unwrap<{ id: string; status: string; group_name: string | null; teams: Team | null }[]>(
+        await supabase
+          .from("competition_registrations")
+          .select("id,status,group_name,teams(id,name,short_name,city,logo_url)")
+          .eq("competition_id", competitionId)
+          .eq("status", "approved"),
+      ),
+  };
+}
+
+export const organizersQuery = {
+  queryKey: ["organizers", "public"],
+  queryFn: async () =>
+    unwrap<{ id: string; name: string; status: string }[]>(
+      await supabase.from("event_organizers").select("id,name,status").order("name"),
+    ),
+};
