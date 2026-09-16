@@ -15,6 +15,9 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminCompetitionsRouteImport } from './routes/admin.competitions'
 import { Route as AdminOrganizersRouteImport } from './routes/admin.organizers'
+import { Route as AdminPaymentsRouteImport } from './routes/admin.payments'
+import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
+import { Route as AdminUsersRouteImport } from './routes/admin.users'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -46,6 +49,21 @@ const AdminOrganizersRoute = AdminOrganizersRouteImport.update({
   path: '/organizers',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminPaymentsRoute = AdminPaymentsRouteImport.update({
+  id: '/payments',
+  path: '/payments',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminSettingsRoute = AdminSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminUsersRoute = AdminUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -53,6 +71,9 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/admin/competitions': typeof AdminCompetitionsRoute
   '/admin/organizers': typeof AdminOrganizersRoute
+  '/admin/payments': typeof AdminPaymentsRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/users': typeof AdminUsersRoute
   '/admin/': typeof AdminIndexRoute
 }
 export interface FileRoutesByTo {
@@ -60,6 +81,9 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/admin/competitions': typeof AdminCompetitionsRoute
   '/admin/organizers': typeof AdminOrganizersRoute
+  '/admin/payments': typeof AdminPaymentsRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/users': typeof AdminUsersRoute
   '/admin': typeof AdminIndexRoute
 }
 export interface FileRoutesById {
@@ -69,6 +93,9 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/admin/competitions': typeof AdminCompetitionsRoute
   '/admin/organizers': typeof AdminOrganizersRoute
+  '/admin/payments': typeof AdminPaymentsRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/users': typeof AdminUsersRoute
   '/admin/': typeof AdminIndexRoute
 }
 export interface FileRouteTypes {
@@ -79,9 +106,20 @@ export interface FileRouteTypes {
     | '/auth'
     | '/admin/competitions'
     | '/admin/organizers'
+    | '/admin/payments'
+    | '/admin/settings'
+    | '/admin/users'
     | '/admin/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/admin/competitions' | '/admin/organizers' | '/admin'
+  to:
+    | '/'
+    | '/auth'
+    | '/admin/competitions'
+    | '/admin/organizers'
+    | '/admin/payments'
+    | '/admin/settings'
+    | '/admin/users'
+    | '/admin'
   id:
     | '__root__'
     | '/'
@@ -89,6 +127,9 @@ export interface FileRouteTypes {
     | '/auth'
     | '/admin/competitions'
     | '/admin/organizers'
+    | '/admin/payments'
+    | '/admin/settings'
+    | '/admin/users'
     | '/admin/'
   fileRoutesById: FileRoutesById
 }
@@ -142,18 +183,45 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminOrganizersRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/payments': {
+      id: '/admin/payments'
+      path: '/payments'
+      fullPath: '/admin/payments'
+      preLoaderRoute: typeof AdminPaymentsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/settings': {
+      id: '/admin/settings'
+      path: '/settings'
+      fullPath: '/admin/settings'
+      preLoaderRoute: typeof AdminSettingsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
 interface AdminRouteChildren {
   AdminCompetitionsRoute: typeof AdminCompetitionsRoute
   AdminOrganizersRoute: typeof AdminOrganizersRoute
+  AdminPaymentsRoute: typeof AdminPaymentsRoute
+  AdminSettingsRoute: typeof AdminSettingsRoute
+  AdminUsersRoute: typeof AdminUsersRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminCompetitionsRoute: AdminCompetitionsRoute,
   AdminOrganizersRoute: AdminOrganizersRoute,
+  AdminPaymentsRoute: AdminPaymentsRoute,
+  AdminSettingsRoute: AdminSettingsRoute,
+  AdminUsersRoute: AdminUsersRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 
