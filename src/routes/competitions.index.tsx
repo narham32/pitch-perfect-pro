@@ -11,7 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 
-export const Route = createFileRoute("/competitions")({
+export const Route = createFileRoute("/competitions/")({
   head: () => ({
     meta: [
       { title: "Browse Football Competitions — PitchForge" },
