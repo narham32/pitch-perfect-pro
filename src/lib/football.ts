@@ -103,7 +103,7 @@ export type ScorerRow = {
 const MATCH_SELECT =
   "*, home_team:teams!matches_home_team_id_fkey(id,name,short_name,city,logo_url), away_team:teams!matches_away_team_id_fkey(id,name,short_name,city,logo_url)";
 
-function unwrap<T>(res: { data: T | null; error: { message: string } | null }): T {
+function unwrap<T>(res: { data: unknown; error: { message: string } | null }): T {
   if (res.error) throw new Error(res.error.message);
   return (res.data ?? []) as T;
 }
