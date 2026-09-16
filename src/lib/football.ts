@@ -103,7 +103,7 @@ export type ScorerRow = {
 const MATCH_SELECT =
   "*, home_team:teams!matches_home_team_id_fkey(id,name,short_name,city,logo_url), away_team:teams!matches_away_team_id_fkey(id,name,short_name,city,logo_url)";
 
-function unwrap<T>(res: { data: T | null; error: { message: string } | null }): T {
+function unwrap<T>(res: { data: unknown; error: { message: string } | null }): T {
   if (res.error) throw new Error(res.error.message);
   return (res.data ?? []) as T;
 }
@@ -286,8 +286,8 @@ export function generateRoundRobin(teamIds: string[]) {
   const n = ids.length;
   for (let round = 0; round < n - 1; round++) {
     for (let i = 0; i < n / 2; i++) {
-      const home = ids[i];
-      const away = ids[n - 1 - i];
+      const home = ids[i]!;
+      const away = ids[n - 1 - i]!;
       if (home !== "__bye__" && away !== "__bye__") {
         rounds.push(
           round % 2 === 0
